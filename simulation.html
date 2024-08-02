@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .highlight {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Hello World Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Input</h2>
+            <label for="name">Enter Your Name:</label>
+            <input type="text" id="name"><br><br>
+            <button id="startBtn" onclick="startExecution()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetValues()">Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="code" class="code-box">
+                #include &lt;iostream&gt;<br>
+                using namespace std;<br>
+                int main() {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;char name[50];<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Enter your name: ";<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cin &gt;&gt; name;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;cout &lt;&lt; "Hello, " &lt;&lt; name &lt;&lt; "!";<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;return 0;<br>
+                }
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var steps = []; // Array to store execution steps
+        var currentIndex = 0; // Index to track current step
+        
+        function startExecution() {
+            // Initialize execution steps array with explanations
+            steps = [
+                "Including the standard input-output library.",
+                "Starting the main function.",
+                "Declaring a character array to store the name.",
+                "Printing 'Enter your name: ' to prompt the user.",
+                "Reading the name entered by the user.",
+                "Recording the name entered by the user.",
+                "Printing 'Hello, ' followed by the user's name.",
+                "Returning 0 to indicate successful execution."
+            ];
+            
+            // Display first step in the execution box
+            document.getElementById("execution").innerText = steps[currentIndex];
+            speak(steps[currentIndex]); // Speak the first step
+            
+            // Disable start button and enable next button
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("nextBtn").disabled = false;
+        }
+        
+        function nextStep() {
+            // Increment current step index
+            currentIndex++;
+            
+            // Display the next step in the execution box
+            var step = steps[currentIndex];
+            if (step.includes("Recording the name entered by the user.")) {
+                var name = document.getElementById("name").value;
+                step = step.replace("Recording the name entered by the user.", "Recording name: " + name);
+            }
+            document.getElementById("execution").innerText += "\n" + step;
+            speak(step); // Speak the step
+            
+            // If all steps are completed, disable next button
+            if (currentIndex === steps.length - 1) {
+                document.getElementById("nextBtn").disabled = true;
+            }
+            
+            // If it's the step to print the name entered by the user, display the output
+            if (currentIndex === 6) {
+                var name = document.getElementById("name").value;
+                document.getElementById("output").innerText = "Hello, " + name + "!\n";
+            }
+        }
+        
+        function resetValues() {
+            // Clear input field
+            document.getElementById("name").value = "";
+            
+            // Clear execution steps
+            document.getElementById("execution").innerText = "";
+            
+            // Reset current step index
+            currentIndex = 0;
+            
+            // Clear output
+            document.getElementById("output").innerText = "";
+            
+            // Enable start button and disable next button
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
+        }
+        
+        function speak(text) {
+            var msg = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

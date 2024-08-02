@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control Structures Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .output-box {
+            margin-top: 2px; /* Adjust margin-top for the output box */
+        }
+        .highlight {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Control Structures Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Control Structure</h2>
+            <label for="controlStructure">Select Control Structure:</label>
+            <select id="controlStructure">
+                <option value="simpleIf">Simple if Statement</option>
+                <option value="ifElse">If-Else Statement</option>
+                <option value="nestedIfElse">Nested If-Else Statement</option>
+                <option value="switchCase">Switch Control Structure</option>
+            </select><br><br>
+            <label for="inputNumber">Enter a Number:</label>
+            <input type="number" id="inputNumber"><br><br>
+            <button id="startBtn" onclick="startExecution()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetValues()">Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="codeTitle"></div>
+            <div id="code" class="code-box">
+                <!-- C++ code will be displayed here -->
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 0px;">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var cppCodeSimpleIf = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num; 
+
+    if (num > 0) { 
+        cout<< "Number is positive."; 
+    }
+
+    return 0;
+}`;
+        var cppCodeIfElse = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num; 
+
+    if (num > 0) { 
+        cout << "Number is positive."; 
+    } else { 
+        cout << "Number is non-positive."; 
+    }
+
+    return 0;
+}`;
+
+        var cppCodeNestedIfElse = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num; 
+
+    if (num > 0) { 
+        cout << "Number is positive.";
+    } else if (num == 0) { 
+        cout << "Number is zero."; 
+    } else { 
+        cout << "Number is non-positive."; 
+    }
+
+    return 0;
+}`;
+
+        var cppCodeSwitchCase = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num; 
+
+    switch (num) { 
+        case 1: 
+            cout << "You entered 1."; 
+            break;
+        case 2: 
+            cout << "You entered 2."; 
+            break;
+        case 3: 
+            cout << "You entered 3."; 
+            break;
+        default: 
+            cout << "You entered a number other than 1, 2, or 3."; 
+            break;
+    }
+
+    return 0;
+}`;
+
+        var steps = []; // Array to store execution steps
+        var currentIndex = 0; // Index to track current step
+
+        function startExecution() {
+            var controlStructure = document.getElementById("controlStructure").value;
+            var inputNumber = parseInt(document.getElementById("inputNumber").value);
+            var cppCode = "";
+            var codeTitle = "";
+
+            switch (controlStructure) {
+                case "simpleIf":
+                    cppCode = cppCodeSimpleIf;
+                    codeTitle = "Using Simple if Statement to Check if a Number is Positive";
+                    steps = [
+                        "Including the input-output library.",
+                        "Starting the main function.",
+                        "Declaring integer variable num.",
+                        "Checking if num is positive: " + inputNumber + " > 0",
+                        "Printing 'Number is positive' if num is positive.",
+                        "Returning 0 to indicate successful execution."
+                    ];
+                    break;
+                case "ifElse":
+                    cppCode = cppCodeIfElse;
+                    codeTitle = "Using If-Else Statement to Check if a Number is Positive";
+                    steps = [
+                        "Including the input-output library.",
+                        "Starting the main function.",
+                        "Declaring integer variable num.",
+                        "Checking if num is positive: " + inputNumber + " > 0",
+                        "Printing 'Number is positive' if num is positive, otherwise printing 'Number is non-positive'.",
+                        "Returning 0 to indicate successful execution."
+                    ];
+                    break;
+                case "nestedIfElse":
+                    cppCode = cppCodeNestedIfElse;
+                    codeTitle = "Using Nested If-Else Statement to Check if a Number is Positive, Zero, or Negative";
+                    steps = [
+                        "Including the input-output library.",
+                        "Starting the main function.",
+                        "Declaring integer variable num.",
+                        "Checking if num is positive: " + inputNumber + " > 0",
+                        "Printing 'Number is positive' if num is positive.",
+                        "Checking if num is zero: " + inputNumber + " == 0",
+                        "Printing 'Number is zero' if num is zero.",
+                        "Printing 'Number is non-positive' if all conditions are false.",
+                        "Returning 0 to indicate successful execution."
+                    ];
+                    break;
+                case "switchCase":
+                    cppCode = cppCodeSwitchCase;
+                    codeTitle = "Using Switch Control Structure to Check Entered Number";
+                    steps = [
+                        "Including the input-output library.",
+                        "Starting the main function.",
+                        "Declaring integer variable num.",
+                        "Comparing num with each case value until the desired number is reached.",
+                        "Displaying the message corresponding to the matching case.",
+                        "Returning 0 to indicate successful execution."
+                    ];
+                    break;
+                default:
+                    break;
+            }
+
+            // Display C++ code and code title
+            document.getElementById("codeTitle").innerText = "C++ Code - " + codeTitle;
+            document.getElementById("code").innerHTML = cppCode.replace(/\n/g, "<br>");
+
+            // Display first step in the execution box
+            document.getElementById("execution").innerText = steps[currentIndex];
+            speak(steps[currentIndex]); // Speak the first step
+
+            // Disable start button and enable next button
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("nextBtn").disabled = false;
+        }
+
+        function nextStep() {
+            // Increment current step index
+            currentIndex++;
+
+            // If all steps are completed, disable next button
+            if (currentIndex === steps.length - 1) {
+                document.getElementById("nextBtn").disabled = true;
+            }
+
+            // Display the next step in the execution box
+            document.getElementById("execution").innerText += "\n" + steps[currentIndex];
+            speak(steps[currentIndex]); // Speak the step
+
+            // Update output box when reaching the print statement
+            var controlStructure = document.getElementById("controlStructure").value;
+            var inputNumber = parseInt(document.getElementById("inputNumber").value);
+            switch (controlStructure) {
+                case "simpleIf":
+                    if (currentIndex === 4 && inputNumber > 0) {
+                        document.getElementById("output").innerText = "Number is positive.";
+                    }
+                    break;
+                case "ifElse":
+                    if (currentIndex === 4 && inputNumber > 0) {
+                        document.getElementById("output").innerText = "Number is positive.";
+                    } else if (currentIndex === 5 && inputNumber <= 0) {
+                        document.getElementById("output").innerText = "Number is non-positive.";
+                    }
+                    break;
+                case "nestedIfElse":
+                    if (currentIndex === 4 && inputNumber > 0) {
+                        document.getElementById("output").innerText = "Number is positive.";
+                    } else if (currentIndex === 5 && inputNumber === 0) {
+                        document.getElementById("output").innerText = "Number is zero.";
+                    } else if (currentIndex === 6 && inputNumber < 0) {
+                        document.getElementById("output").innerText = "Number is non-positive.";
+                    }
+                    break;
+                case "switchCase":
+                    if (currentIndex === 4) {
+                        switch (inputNumber) {
+                            case 1:
+                            case 2:
+                            case 3:
+                                document.getElementById("output").innerText = "You entered " + inputNumber;
+                                break;
+                            default:
+                                document.getElementById("output").innerText = "You entered a number other than 1, 2, or 3.";
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        function resetValues() {
+            // Clear input fields
+            document.getElementById("controlStructure").value = "simpleIf";
+            document.getElementById("inputNumber").value = "";
+
+            // Clear C++ code, code title, and execution steps
+            document.getElementById("codeTitle").innerText = "";
+            document.getElementById("code").innerText = "";
+            document.getElementById("execution").innerText = "";
+
+            // Reset current step index
+            currentIndex = 0;
+
+            // Clear output
+            document.getElementById("output").innerText = "";
+
+            // Enable start button and disable next button
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
+        }
+
+        function speak(text) {
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ User-Defined Exception Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .output-box {
+            margin-top: 2px; /* Adjust margin-top for the output box */
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body onload="initializeConcept()">
+    <h1>C++ User-Defined Exception Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Exception Handling Selection</h2>
+            <label for="ExceptionHandlingSelection">Select Concept:</label>
+            <select id="ExceptionHandlingSelection" onchange="toggleConcept()">
+                <option value="userDefinedException">User-Defined Exception</option>
+                <option value="passingParameters">Passing Parameters</option>
+            </select><br><br>
+            <button id="startBtn" onclick="startSimulation()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetSimulation()" disabled>Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="code" class="code-box">
+                <!-- C++ code will be displayed here -->
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 0px;">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var currentStepIndex = 0;
+        var steps = [];
+
+        const userDefinedExceptionCode = `#include <iostream>\n#include <string>\nusing namespace std;\n\nclass MyException : public exception {\nprivate:\n    string message;\npublic:\n    MyException(const string& msg) : message(msg) {}\n    const char* what() const noexcept override {\n        return message.c_str();\n    }\n};\n\nint main() {\n    try {\n        throw MyException("Custom exception occurred");\n    }\n    catch (const MyException& e) {\n        cout << "Exception caught: " << e.what() << endl;\n    }\n    return 0;\n}`;
+
+        const passingParametersCode = `#include <iostream>\n#include <stdexcept>\nusing namespace std;\n\nclass DivideByZeroException : public runtime_error {\npublic:\n    DivideByZeroException(const string& msg) : runtime_error(msg) {}\n};\n\ndouble divide(double a, double b) {\n    if (b == 0)\n        throw DivideByZeroException("Division by zero error");\n    return a / b;\n}\n\nint main() {\n    try {\n        cout << divide(10, 0) << endl;\n    }\n    catch (const DivideByZeroException& e) {\n        cout << "Exception caught: " << e.what() << endl;\n    }\n    return 0;\n}`;
+
+        const userDefinedExceptionSteps = [
+            "Include the iostream header for input and output operations.",
+            "Include the string header for string manipulation.",
+            "Define a custom exception class MyException derived from std::exception.",
+            "Add a private member variable 'message' to store the exception message.",
+            "Define a constructor to initialize the message.",
+            "Override the what() function to return the exception message.",
+            "In the main function, throw an instance of MyException with a custom message.",
+            "Catch the MyException object and print the message.",
+            "End of the main function."
+        ];
+
+        const passingParametersSteps = [
+            "Include the iostream header for input and output operations.",
+            "Include the stdexcept header for standard exception classes.",
+            "Define a custom exception class DivideByZeroException derived from std::runtime_error.",
+            "Define a constructor to initialize the exception message using the base class constructor.",
+            "Define a divide function that takes two doubles as parameters.",
+            "Check if the second parameter is zero.",
+            "If zero, throw a DivideByZeroException with an error message.",
+            "In the main function, call the divide function with arguments 10 and 0.",
+            "Catch the DivideByZeroException object and print the message.",
+            "End of the main function."
+        ];
+
+        function initializeConcept() {
+            var selectedConcept = document.getElementById("ExceptionHandlingSelection").value;
+            if (selectedConcept === "userDefinedException") {
+                document.getElementById("code").innerText = userDefinedExceptionCode;
+                steps = userDefinedExceptionSteps;
+            } else if (selectedConcept === "passingParameters") {
+                document.getElementById("code").innerText = passingParametersCode;
+                steps = passingParametersSteps;
+            }
+        }
+
+        function toggleConcept() {
+            initializeConcept();
+            resetSimulation();
+        }
+
+        function startSimulation() {
+            currentStepIndex = 0; // Reset the step index
+            displayStep(currentStepIndex);
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("nextBtn").disabled = false;
+            document.getElementById("resetBtn").disabled = false;
+        }
+
+        function nextStep() {
+            currentStepIndex++;
+            if (currentStepIndex < steps.length) {
+                displayStep(currentStepIndex);
+            }
+            if (currentStepIndex === steps.length - 1) {
+                document.getElementById("nextBtn").disabled = true;
+                displayOutput(); // Ensure the output is displayed after completing the steps.
+            }
+        }
+
+        function resetSimulation() {
+            currentStepIndex = 0;
+            document.getElementById("execution").innerText = "";
+            document.getElementById("output").innerText = "";
+            document.getElementById("code").innerText = "";
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
+            document.getElementById("resetBtn").disabled = true;
+            initializeConcept();
+        }
+
+        function displayStep(index) {
+            var executionText = "";
+            for (var i = 0; i <= index; i++) {
+                executionText += steps[i] + "\n";
+            }
+            document.getElementById("execution").innerText = executionText;
+            speakText(steps[index]); // Narrate the current step
+        }
+
+        function displayOutput() {
+            var output = "";
+            if (document.getElementById("ExceptionHandlingSelection").value === "userDefinedException") {
+                output = "Exception caught: Custom exception occurred";
+            } else if (document.getElementById("ExceptionHandlingSelection").value === "passingParameters") {
+                output = "Exception caught: Division by zero error";
+            }
+            document.getElementById("output").innerHTML = "<strong>Output:</strong><br>" + output;
+            speakText("Output: " + output.replace(/\n/g, ". ")); // Narrate the output
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                var msg = new SpeechSynthesisUtterance();
+                msg.text = text;
+                window.speechSynthesis.speak(msg);
+            } else {
+                console.log("Sorry, your browser doesn't support text to speech!");
+            }
+        }
+    </script>
+</body>
+</html>

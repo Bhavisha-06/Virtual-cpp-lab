@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to C++ Virtual Lab</title>
+    <link rel="stylesheet" href="styles.css"> <!-- You can link your CSS file here -->
+    <style>
+        /* Basic styling for the menu box */
+        .menu-box {
+            position: fixed;
+            top: 0;
+            left: -250px; /* Hide the menu box by default */
+            width: 250px;
+            height: 100%;
+            background-color: #333;
+            transition: left 0.3s ease;
+            padding-top: 20px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .menu-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1; /* Ensure the button appears above other content */
+        }
+
+        .menu-content {
+            padding: 0 20px;
+            color: #fff;
+        }
+
+        /* Style the links inside the menu */
+        .menu-content a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 0;
+        }
+
+        /* Hide content by default */
+        .content-section {
+            display: none;
+        }
+
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+
+        /* Show content when targeted */
+        .content-section:target {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-box">
+        <div class="menu-content">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#experiments">List of Experiments</a></li>
+                <li><a href="#audience">Target Audience</a></li>
+                <li><a href="#alignment">Course Alignment</a></li>
+                <li><a href="#feedback">Feedback</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Welcome to C++ Virtual Lab</h1>
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="menu-btn" onclick="toggleMenu()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <path d="M0 0h24v24H0z" fill="none"/>
+                <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+            </svg>
+        </div>
+        
+        <div class="content-section" id="introduction">
+            <h2>Introduction</h2>
+            <p>In this lab, students will be able to learn and practice basic C++ programming. Students can expand their skillset by learning and solving basic problems in C++.C++ is an object oriented programming language. It is easy for beginners to learn and widely utilized in many areas. This lab is an overview of the C++ programming language for learners without prior programming knowledge. It has graphical user interface-driven applications. The examples and difficulties used in this lab are drawn from numerous areas like text processing, simple graphics creation, and image manipulation, Data Science and visualization, Desktop GUI, hypertext mark-up language, and web development.
+            </p>
+        </div>
+        
+        <div class="content-section" id="experiments">
+            <h2>List of Experiments</h2>
+            <ul>
+                <li><a href="experiment1.html">Experiment 1: Basic Input/Output</a></li>
+                <li><a href="experiment2.html">Experiment 2: Arithmetic operations</a></li>
+                <li><a href="experiment3.html">Experiment 3: control statements</a></li>
+                <li><a href="experiment4.html">Experiment 4: Loops</a></li>
+                <li><a href="experiment5.html">Experiment 5: Arrays</a></li>
+                <li><a href="experiment6.html">Experiment 6: Classes and objects</a></li>
+                <li><a href="experiment7.html">Experiment 7: Constructors and Destructors</a></li>
+                <li><a href="experiment8.html">Experiment 8: Templates</a></li>
+                <li><a href="experiment9.html">Experiment 9: Operator Overloading</a></li>
+                <li><a href="experiment10.html">Experiment 10: Exception hnadling</a></li>
+                <!-- Add more experiments as needed -->
+            </ul>
+        </div>
+        
+        <div class="content-section" id="audience">
+            <h2>Target Audience</h2>
+            <ul><li>UG</li> <ul><li>B. Tech./ B.E in Computer Science Engineering/Information Technology</li></ul>
+            <li>PG</li><ul>
+                <li>MS/Ph. D. Beginners in Computer Science Engineering/Information Technology</li>
+            </ul>
+            </ul>
+        </div>
+        
+        <div class="content-section" id="alignment">
+            <h2>Course Alignment</h2>
+            <p>The lab contents are chosen such that it covers the syllabi of Python Programming Lab
+               <ol>
+                <li>Dr. A.P.J. Abdul Kalam Technical University Uttar Pradesh</li>
+                <li>Indian School of Business Telangana</li>
+                <li>Indian Institute of Management Bangalore Karnataka</li>
+                <li>Indian Institute of Management Calcutta West Bengal</li>
+                <li>SCMHRD Maharashtra</li>
+            </ol></p>
+        </div>
+        
+        <div class="content-section" id="feedback">
+            <h2>Feedback</h2>
+            <p>Dear User,
+
+                Thanks for using Virtual Labs. Your opinion is valuable to us. To help us improve, we'd like to ask you a few questions about your experience. It will only take 3 minutes and your answers will help us make Virtual Labs better for you and other users.
+                <a href="https://forms.gle/L2YjhatX8kBg2H23A"><u>Feedback form</u></a>
+                
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() {
+            const menuBox = document.querySelector('.menu-box');
+            if (menuBox.style.left === '0px') {
+                menuBox.style.left = '-250px';
+            } else {
+                menuBox.style.left = '0px';
+            }
+        }
+        function hideImage() {
+            document.getElementById("transparent-image").style.display = "none";
+        }
+    </script>
+</body>
+</html>

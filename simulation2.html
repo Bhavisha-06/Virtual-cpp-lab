@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arithmetic Operations Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .highlight {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .output-box {
+            margin-top: 2px; /* Adjust margin-top for the output box */
+        }
+    </style>
+</head>
+<body>
+    <h1>Arithmetic Operations Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Input</h2>
+            <label for="operation">Select Operation:</label>
+            <select id="operation">
+                <option value="addition">Addition</option>
+                <option value="subtraction">Subtraction</option>
+                <option value="multiplication">Multiplication</option>
+                <option value="division">Division</option>
+            </select><br><br>
+            <label for="num1">Enter First Number:</label>
+            <input type="number" id="num1"><br><br>
+            <label for="num2">Enter Second Number:</label>
+            <input type="number" id="num2"><br><br>
+            <button id="startBtn" onclick="startExecution()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetValues()">Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="code" class="code-box">
+                <!-- C code will be displayed here -->
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 0px;">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var cCodeAddition = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num1, num2, sum;
+    
+    cout &lt;&lt; "Enter first number: ";
+    cin &gt;&gt; num1;
+    
+    cout &lt;&lt; "Enter second number: ";
+    cin &gt;&gt; num2;
+    
+    sum = num1 + num2;
+    
+    cout &lt;&lt; "Sum:" &lt;&lt; sum;
+
+    return 0;
+}`;
+
+        var cCodeSubtraction = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num1, num2, diff;
+    
+    cout &lt;&lt; "Enter first number: ";
+    cin &gt;&gt; num1;
+    
+    cout &lt;&lt; "Enter second number: ";
+    cin &gt;&gt; num2;
+    
+    diff = num1 - num2;
+    
+    cout &lt;&lt; "Difference:" &lt;&lt; diff;
+
+    return 0;
+}`;
+
+        var cCodeMultiplication = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num1, num2, product;
+    
+    cout &lt;&lt; "Enter first number: ";
+    cin &gt;&gt; num1;
+    
+    cout &lt;&lt; "Enter second number: ";
+    cin &gt;&gt; num2;
+    
+    product = num1 * num2;
+    
+    cout &lt;&lt; "Product:" &lt;&lt; product;
+
+    return 0;
+}`;
+
+        var cCodeDivision = `#include &lt;iostream&gt;
+using namespace std;
+int main() {
+    int num1, num2;
+    float quotient;
+    
+    cout &lt;&lt; "Enter first number: ";
+    cin &gt;&gt; num1;
+    
+    cout &lt;&lt; "Enter second number: ";
+    cin &gt;&gt; num2;
+    
+    quotient = (float)num1 / num2;
+    
+    cout &lt;&lt; "Quotient:" &lt;&lt; quotient;
+
+    return 0;
+}`;
+
+        var steps = []; // Array to store execution steps
+        var currentIndex = 0; // Index to track current step
+        
+        function startExecution() {
+            var operation = document.getElementById("operation").value;
+            var cCode = "";
+
+            switch (operation) {
+                case "addition":
+                    cCode = cCodeAddition;
+                    break;
+                case "subtraction":
+                    cCode = cCodeSubtraction;
+                    break;
+                case "multiplication":
+                    cCode = cCodeMultiplication;
+                    break;
+                case "division":
+                    cCode = cCodeDivision;
+                    break;
+                default:
+                    break;
+            }
+
+            // Display C code in the code box
+            document.getElementById("code").innerHTML = cCode.replace(/\n/g, "<br>");
+            
+            // Initialize execution steps array with explanations
+            steps = [
+                "Including the standard input-output library.",
+                "Starting the main function.",
+                "Declaring integer variables num1, num2, and result.",
+                "Printing 'Enter first number: ' to prompt the user.",
+                "Reading the first number entered by the user.",
+                "Printing 'Enter second number: ' to prompt the user.",
+                "Reading the second number entered by the user.",
+                "Performing the operation and storing the result.",
+                "Printing the result.",
+                "Returning 0 to indicate successful execution."
+            ];
+            
+            // Display first step in the execution box
+            document.getElementById("execution").innerText = steps[currentIndex];
+            speak(steps[currentIndex]); // Speak the first step
+            
+            // Disable start button and enable next button
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("nextBtn").disabled = false;
+        }
+        
+        function nextStep() {
+            // Increment current step index
+            currentIndex++;
+            
+            // Display the next step in the execution box
+            var step = steps[currentIndex];
+            document.getElementById("execution").innerText += "\n" + step;
+            speak(step); // Speak the step
+            
+            // Display num1 and num2 values if it's the appropriate step
+            if (currentIndex === 4) {
+                document.getElementById("execution").innerText += "\nnum1 = " + document.getElementById("num1").value;
+            } else if (currentIndex === 6) {
+                document.getElementById("execution").innerText += "\nnum2 = " + document.getElementById("num2").value;
+            }
+            
+            // If all steps are completed, disable next button
+            if (currentIndex === steps.length - 1) {
+                document.getElementById("nextBtn").disabled = true;
+                // Output example
+                var output = document.getElementById("output");
+                switch (document.getElementById("operation").value) {
+                    case "addition":
+                        output.innerText = "Result: " + (parseInt(document.getElementById("num1").value) + parseInt(document.getElementById("num2").value)) + "\n";
+                        break;
+                    case "subtraction":
+                        output.innerText = "Result: " + (parseInt(document.getElementById("num1").value) - parseInt(document.getElementById("num2").value)) + "\n";
+                        break;
+                    case "multiplication":
+                        output.innerText = "Result: " + (parseInt(document.getElementById("num1").value) * parseInt(document.getElementById("num2").value)) + "\n";
+                        break;
+                    case "division":
+                        output.innerText = "Result: " + (parseFloat(document.getElementById("num1").value) / parseFloat(document.getElementById("num2").value)).toFixed(2) + "\n";
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+            // Highlight the corresponding line in the code box
+            var codeBox = document.getElementById("code");
+            codeBox.innerHTML = codeBox.innerHTML.replace(/<span class="highlight">.*?<\/span>/g, "");
+            var lines = codeBox.getElementsByTagName("span");
+            if (currentIndex < lines.length) {
+                lines[currentIndex].classList.add("highlight");
+            }
+        }
+        
+        function resetValues() {
+            // Clear input fields
+            document.getElementById("operation").value = "";
+            document.getElementById("num1").value = "";
+            document.getElementById("num2").value = "";
+            
+            // Clear C code and execution steps
+            document.getElementById("code").innerText = "";
+            document.getElementById("execution").innerText = "";
+            
+            // Reset current step index
+            currentIndex = 0;
+            
+            // Clear output
+            document.getElementById("output").innerText = "";
+            
+            // Enable start button and disable next button
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
+        }
+
+        function speak(text) {
+            var utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

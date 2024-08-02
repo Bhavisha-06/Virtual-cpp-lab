@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - C++ E-lab</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.8;
+        }
+
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="box">
+            <h1>Login</h1>
+            <form id="loginForm">
+                <label for="username"><b>Username:</b></label>
+                <input type="text" id="username" name="username" required><br><br>
+                <label for="branch"><b>Branch:</b></label>
+                <select id="branch" name="branch">
+                    <option value="BTech Artificial Intelligence (section A)">BTech Artificial Intelligence (section A)</option>
+                    <option value="BTech Artificial Intelligence (section B)">BTech Artificial Intelligence (section B)</option>
+                    <option value="BTech Artificial Intelligence (section C)">BTech Artificial Intelligence (section C)</option>
+                </select><br><br>
+                <label for="registrationNumber"><b>Registration Number:</b></label>
+                <input type="text" id="registrationNumber" name="registrationNumber" required><br><br>
+                <label for="year"><b>Year:</b></label>
+                <select id="year" name="year">
+                    <option value="UG I">UG-I</option>
+                    <option value="UG II">UG-II</option>
+                    <option value="UG III">UG-III</option>
+                    <option value="UG IV">UG-IV</option>
+                    <option value="PG">PG</option>
+                </select><br><br>
+                <button type="submit">Login</button>
+                <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form submission
+
+            // Gather login information
+            var username = document.getElementById("username").value;
+            var branch = document.getElementById("branch").value;
+            var registrationNumber = document.getElementById("registrationNumber").value;
+            var year = document.getElementById("year").value;
+
+            // Send login information to Google Apps Script
+            fetch('https://script.google.com/macros/s/AKfycbwRtiHtaTDsQvDXo93PsV6n_Lf-qEZK5RvwuZLsZbzD0VDA7A0fvqPf--syGETDv8d61Q/exec', { // Replace 'YOUR_WEB_APP_URL' with your actual Web App URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: username,
+                    branch: branch,
+                    registrationNumber: registrationNumber,
+                    year: year
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Login information sent successfully.');
+                window.location.href = "index.html"; // Always redirect to the main page
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = "index.html"; // Always redirect to the main page even if there's an error
+            });
+        });
+    </script>
+</body>
+</html>

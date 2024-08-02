@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experiment 5: Arrays</title>
+    <style>
+        /* Basic styling for the toggle box */
+        .toggle-box {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            cursor: pointer;
+            z-index: 1; /* Ensure the button appears above other content */
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+            padding: 15px; /* Add padding to the paragraphs */
+            background-color: #f9f9f9; /* Add background color */
+            border-radius: 10px; /* Add rounded corners */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            margin: 20px auto; /* Center paragraphs horizontally and add space between them */
+            max-width: 600px; /* Limit the width of the paragraphs */
+        }
+        #theory p {
+            text-align: left; /* Align paragraphs to the left */
+        }
+
+        .toggle-content {
+            display: none;
+            position: fixed;
+            top: 60px;
+            left: 20px;
+            width: 200px;
+            background-color: #333;
+            padding: 10px;
+            color: #fff;
+            z-index: 1; /* Ensure the menu appears above other content */
+        }
+
+        /* Style the links inside the toggle box */
+        .toggle-content a {
+            display: block;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 0;
+        }
+
+        /* Show content when toggle is active */
+        .toggle-content.active {
+            display: block;
+        }
+        
+        /* Ensure menu toggle button doesn't overlap with text */
+        .container {
+            margin-top: 40px; /* Adjust this value to avoid overlap */
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+            max-width: 800px; /* Limit the width of the container */
+            margin: auto; /* Center the container horizontally */
+        }
+        h1, h2 {
+            text-align: center;
+        }
+
+        #compiler-iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+        .readme-button {
+            display: block;
+            margin: 20px auto;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: #007BFF; /* Blue color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            bottom: -20px; /* Push the button to the bottom of the page */
+        }
+        .readme-button:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-box" onclick="toggleMenu()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/>
+        </svg>
+    </div>
+    <div class="toggle-content" id="toggleContent">
+        <ul>
+            <li><a href="#aim" onclick="showSection('aim')">Aim</a></li>
+            <li><a href="#theory" onclick="showSection('theory')">Theory</a></li>
+            <li><a href="#procedure" onclick="showSection('procedure')">Procedure</a></li>
+            <li><a href="simulation5.html">Simulation</a></li> <!-- Link directly to simulation page -->
+            <li><a href="#do-it-yourself" onclick="showCompiler()">Do It Yourself</a></li>
+            <li><a href="#references" onclick="showSection('references')">References</a></li>
+            <li><a href="#feedback" onclick="showSection('feedback')">Feedback</a></li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <h1>Experiment 5: Arrays</h1>
+        <!-- Content goes here -->
+        <div id="aim">
+            <h2>Aim</h2>
+            <p>To explain types of arrays. In this experiment, the Student will be able to understand the basics of arrays used in C++ programming Language with the help of an iterative simulator.</p>
+        </div>
+        <div id="theory">
+            <h2>Theory</h2>
+            <p>C++ Arrays<br>
+                Arrays are used to store multiple values in a single variable, instead of declaring separate variables for each value.<br>
+                An Array is a linear data structure that stores elements of similar datatype in a sequential manner.<br>
+                To declare an array, define the variable type, specify the name of the array followed by square brackets and specify the number of elements it should store:<br>
+                string cars[4];<br>
+                To insert values to it, we can use an array literal - place the values in a comma-separated list, inside curly braces<br>
+                string flowers[4] = {"Rose", "Lotus", "Tulip", "Sunflower"};<br>
+                To create an array of three integers, you could write:<br>
+                int myNum[3] = {10, 20, 30};<br>
+                You access an array element by referring to the index number inside square brackets [].<br>
+
+This statement accesses the value of the first element in cars:<br>
+
+Example<br>
+string cars[4] = {"Volvo", "BMW", "Ford", "Mazda"};<br>
+cout << flowers[0];<br>
+// Outputs Rose<br>
+                
+                
+                </p>
+        </div>
+        <div id="procedure">
+            <h2>Procedure</h2>
+            <p>Steps of simulator :
+                <ol>
+                <li>Read the simulator details.</li>
+                <li>Enter the input value.</li>
+                <li>Press START to proceed.</li>
+                <li>Press NEXT to see the execution of the code.</li>
+                <li>Relevant line in the code will be executed and explained.</li>
+                <li>The local variables will be shown in the Output Panel with their values.</li>
+            </ol></p>
+        </div>
+        <div id="simulation">
+            <h2>Simulation</h2>
+            <p>...</p>
+        </div>
+        <div id="do-it-yourself">
+            <h2>Do It Yourself</h2>
+            <iframe id="compiler-iframe" src=""></iframe>
+        </div>
+        <div id="references">
+            <h2>References</h2>
+            <p>https://www.w3schools.com/</p>
+        </div>
+        <div id="feedback">
+            <h2>Feedback</h2>
+            <p>Dear User,
+
+                Thanks for using Virtual Labs. Your opinion is valuable to us. To help us improve, we'd like to ask you a few questions about your experience. It will only take 3 minutes and your answers will help us make Virtual Labs better for you and other users.</p>
+                <a href="https://forms.gle/L2YjhatX8kBg2H23A">Feedback form</a>
+        </div>
+        <button class="readme-button" onclick="readContent()">Readme</button>
+
+    </div>
+
+    <script>
+        // Show the Aim section by default when the page is loaded
+        window.onload = function() {
+            showSection('aim');
+        };
+
+        function toggleMenu() {
+            const toggleContent = document.getElementById('toggleContent');
+            toggleContent.classList.toggle('active');
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.container > div');
+            sections.forEach(section => {
+                section.style.display = 'none';
+            });
+
+            // Show the selected section
+            const selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+            // Close toggle box after clicking a section
+            const toggleContent = document.getElementById('toggleContent');
+            toggleContent.classList.remove('active');
+        }
+
+        function showCompiler() {
+            showSection('do-it-yourself');
+            // Resize iframe after showing
+            const iframe = document.getElementById('compiler-iframe');
+            iframe.src = "https://www.programiz.com/cpp-programming/online-compiler/";
+            iframe.style.height = "800px"; // Adjust height as needed
+        }
+
+        function readContent() {
+    const speech = new SpeechSynthesisUtterance();
+    speech.lang = "en-US";
+    speech.volume = 1;
+    speech.rate = 1;
+    speech.pitch = 1;
+
+    // Get the container that holds the main content
+    const container = document.querySelector('.container');
+    
+    // Get all the child elements of the container
+    const children = container.children;
+    
+    let textToRead = '';
+
+    // Iterate through the children to find visible sections and ignore the button
+    for (let i = 0; i < children.length; i++) {
+        const child = children[i];
+
+        // Check if the element is visible and not a button
+        if (child.style.display !== 'none' && child.tagName !== 'BUTTON') {
+            textToRead += child.innerText + ' ';
+        }
+    }
+
+    speech.text = textToRead.trim(); // Set the text to be read aloud
+    window.speechSynthesis.speak(speech);
+}
+    </script>
+</body>
+</html>

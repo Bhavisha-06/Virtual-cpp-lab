@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Templates Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .output-box {
+            margin-top: 2px; /* Adjust margin-top for the output box */
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>C++ Templates Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Template Selection</h2>
+            <label for="templateType">Select Template:</label>
+            <select id="templateType">
+                <option value="classTemplate">Class Template</option>
+                <option value="functionTemplate">Function Template</option>
+            </select><br><br>
+            <button id="startBtn" onclick="startSimulation()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetSimulation()">Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="code" class="code-box">
+                <!-- C++ template code will be displayed here -->
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 0px;">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var currentStepIndex = 0;
+        var steps = [];
+
+        const templateCode = {
+            classTemplate: `#include <iostream> \nusing namespace std;\ntemplate <typename T> \nclass Box {\npublic:\n    T content;\n    void setContent(T newContent) {\n        content = newContent;\n    }\n    T getContent() {\n        return content;\n    }\n};\nint main() {\n    Box<int> intBox;\n    intBox.setContent(123);\n    cout << intBox.getContent() << endl;\n    return 0;\n}`,
+            functionTemplate: `#include <iostream>;\nusing namespace std;\ntemplate <typename T> \nT add(T a, T b) {\n    return a + b;\n}\nint main() {\n    cout << add<int>(10, 20) << endl;\n    return 0;\n}`
+        };
+
+        const simulationSteps = {
+            classTemplate: [
+                "Include the iostream header for input/output operations.",
+                "Define a class template named Box with a type parameter T.",
+                "Define a member variable 'content' of type T.",
+                "Define a member function 'setContent' to set the 'content' variable.",
+                "Define a member function 'getContent' to return the 'content' variable.",
+                "In the main function, create an instance of Box for the int type.",
+                "Set the content of the box using 'setContent'.",
+                "Get and print the content of the box using 'getContent'.",
+                "End of the main function."
+            ],
+            functionTemplate: [
+                "Include the iostream header for input/output operations.",
+                "Define a function template named add with a type parameter T.",
+                "The add function takes two parameters of type T and returns their sum.",
+                "In the main function, call the add function with int type arguments and print the result.",
+                "End of the main function."
+            ]
+        };
+
+        function startSimulation() {
+            var templateType = document.getElementById("templateType").value;
+            document.getElementById("code").innerText = templateCode[templateType];
+            steps = simulationSteps[templateType];
+            document.getElementById("execution").innerText = steps[0];
+            speakText(steps[0]); // Narrate the first step
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("nextBtn").disabled = false;
+        }
+
+        function nextStep() {
+            currentStepIndex++;
+            if (currentStepIndex < steps.length) {
+                document.getElementById("execution").innerText += "\n\n" + steps[currentStepIndex];
+                speakText(steps[currentStepIndex]); // Narrate the current step
+            }
+            if (currentStepIndex === steps.length - 1) {
+                document.getElementById("nextBtn").disabled = true;
+                displayOutput(); // Ensure the output is displayed after completing the steps.
+            }
+        }
+
+        function resetSimulation() {
+            currentStepIndex = 0;
+            document.getElementById("execution").innerText = "";
+            document.getElementById("output").innerText = "";
+            document.getElementById("code").innerText = "";
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = true;
+        }
+
+        function displayOutput() {
+            var templateType = document.getElementById("templateType").value;
+            var output = "";
+
+            if (templateType === "classTemplate") {
+                output = "123";
+            } else if (templateType === "functionTemplate") {
+                output = "30";
+            }
+
+            document.getElementById("output").innerHTML = "<strong>Output:</strong><br>" + output;
+            speakText("Output: " + output); // Narrate the output
+        }
+
+        function speakText(text) {
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>

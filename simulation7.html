@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Constructors and Destructor Simulation</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+        }
+        p {
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+        .box {
+            width: 30%;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .transparent-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Behind other content */
+            opacity: 0.8; /* Adjust the opacity as needed */
+        }
+        .execution-box,
+        .output-box {
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .output-box {
+            margin-top: 2px; /* Adjust margin-top for the output box */
+        }
+        .code-box {
+            background-color: #000;
+            color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        .highlight {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>C++ Constructors and Destructor Simulation</h1>
+    <div class="container">
+        <img src="srm1.jpeg" alt="C++ Virtual Lab" class="transparent-image">
+        <div class="box">
+            <h2>Constructor Type</h2>
+            <label for="constructorType">Select Constructor Type:</label>
+            <select id="constructorType">
+                <option value="default">Default Constructor</option>
+                <option value="copy">Copy Constructor</option>
+            </select><br><br>
+            <label for="inputValue">Enter Object Value:</label><br>
+            <input type="text" id="inputValue" placeholder="Enter object value"><br><br>
+            <button id="startBtn" onclick="startExecution()">Start</button>
+            <button id="nextBtn" onclick="nextStep()" disabled>Next</button>
+            <button id="resetBtn" onclick="resetValues()">Reset</button>
+        </div>
+        <div class="box">
+            <h2>C++ Code</h2>
+            <div id="codeTitle"></div>
+            <div id="code" class="code-box">
+                <!-- C++ code will be displayed here -->
+            </div>
+        </div>
+        <div class="box">
+            <h2>Execution</h2>
+            <div id="execution" class="execution-box"></div>
+        </div>
+    </div>
+    <div class="container" style="margin-top: 0px;">
+        <div class="box">
+            <h2>Output</h2>
+            <div id="output" class="output-box"></div>
+        </div>
+    </div>
+
+    <script>
+        var constructorCodeDefault = `#include <iostream>
+using namespace std;
+
+class MyClass {
+public:
+    MyClass() {
+        cout << "Default constructor called" << endl;
+    }
+    ~MyClass() {
+        cout << "Destructor called" << endl;
+    }
+};
+
+int main() {
+    MyClass obj;
+    return 0;
+}`;
+
+        var constructorCodeCopy = `#include <iostream>
+using namespace std;
+
+class MyClass {
+public:
+    int num;
+    MyClass(const MyClass &obj) {
+        num = obj.num;
+        cout << "Copy constructor called with value: " << num << endl;
+    }
+    ~MyClass() {
+        cout << "Destructor called" << endl;
+    }
+};
+
+int main() {
+    int inputValue = 0;
+    cout << "Enter object value: ";
+    cin >> inputValue;
+    MyClass obj(inputValue);
+    return 0;
+}`;
+
+        var stepsDefault = [
+            "Start of execution",
+            "Class object created inside main()",
+            "Default constructor called",
+            "Output is printed",
+            "Destructor called"
+        ];
+
+        var stepsCopy = [
+            "Start of execution",
+            "Asking for object value",
+            "Copy constructor called ",
+            "Output is printed",
+            "Destructor called"
+        ];
+
+        var currentIndex = -1;
+
+        function startExecution() {
+            var constructorType = document.getElementById("constructorType").value;
+            var inputValue = document.getElementById("inputValue").value;
+            var cppCode = "";
+            var codeTitle = "";
+
+            switch (constructorType) {
+                case "default":
+                    cppCode = constructorCodeDefault;
+                    codeTitle = "Default Constructor";
+                    steps = stepsDefault;
+                    break;
+                case "copy":
+                    cppCode = constructorCodeCopy;
+                    codeTitle = "Copy Constructor";
+                    cppCode = cppCode.replace('// Enter object value', 'int inputValue = ' + inputValue + ';');
+                    steps = stepsCopy;
+                    break;
+                default:
+                    break;
+            }
+
+            document.getElementById("codeTitle").innerText = "C++ Code - " + codeTitle;
+            document.getElementById("code").innerHTML = cppCode.replace(/\n/g, "<br>");
+
+            document.getElementById("nextBtn").disabled = false;
+            document.getElementById("startBtn").disabled = true;
+
+            currentIndex = 0;
+
+            displayStep(currentIndex);
+        }
+
+        function nextStep() {
+            currentIndex++;
+            if (currentIndex == 3) {
+                displayOutput();
+            }
+            if (currentIndex >= steps.length) {
+                document.getElementById("nextBtn").disabled = true;
+                return;
+            }
+
+            displayStep(currentIndex);
+        }
+
+        function resetValues() {
+            document.getElementById("codeTitle").innerText = "";
+            document.getElementById("code").innerText = "";
+            document.getElementById("output").innerText = "";
+            document.getElementById("execution").innerText = "";
+
+            document.getElementById("constructorType").selectedIndex = 0;
+            document.getElementById("inputValue").value = "";
+
+            document.getElementById("nextBtn").disabled = true;
+            document.getElementById("startBtn").disabled = false;
+
+            currentIndex = -1;
+        }
+
+        function displayStep(index) {
+            var executionText = "";
+            for (var i = 0; i <= index; i++) {
+                executionText += steps[i] + "\n";
+            }
+            document.getElementById("execution").innerText = executionText;
+            speakText(steps[index]); // Narrate the current step
+        }
+
+        function displayOutput() {
+            var constructorType = document.getElementById("constructorType").value;
+            var inputValue = document.getElementById("inputValue").value;
+            var output = "";
+
+            switch (constructorType) {
+                case "default":
+                    output += "Default constructor called" + "<br>";
+                    output += "Destructor called" + "<br>";
+                    break;
+                case "copy":
+                    output += "Copy constructor called with value: " + inputValue + "<br>";
+                    output += "Destructor called" + "<br>";
+                    break;
+                default:
+                    break;
+            }
+
+            document.getElementById("output").innerHTML = output;
+            speakText(output.replace(/<br>/g, ". ")); // Narrate the output
+        }
+
+        function speakText(text) {
+            var msg = new SpeechSynthesisUtterance();
+            msg.text = text;
+            window.speechSynthesis.speak(msg);
+        }
+    </script>
+</body>
+</html>
