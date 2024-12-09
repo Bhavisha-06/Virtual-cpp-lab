@@ -40,6 +40,9 @@
             font-size: 18px;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js"></script>
 </head>
 <body>
     <div class="container">
@@ -91,40 +94,28 @@
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
-</script>
-
-    <script>
+        
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent form submission
 
-            // Gather login information
-            var username = document.getElementById("username").value;
-            var branch = document.getElementById("branch").value;
-            var registrationNumber = document.getElementById("registrationNumber").value;
-            var year = document.getElementById("year").value;
+                     const username = document.getElementById("username").value;
+            const branch = document.getElementById("branch").value;
+            const registrationNumber = document.getElementById("registrationNumber").value;
+            const year = document.getElementById("year").value;
 
-            // Send login information to Google Apps Script
-            fetch('https://script.google.com/macros/s/AKfycbwRtiHtaTDsQvDXo93PsV6n_Lf-qEZK5RvwuZLsZbzD0VDA7A0fvqPf--syGETDv8d61Q/exec', { // Replace 'YOUR_WEB_APP_URL' with your actual Web App URL
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
+            try {
+                await addDoc(collection(db, "users"), {
                     username: username,
                     branch: branch,
                     registrationNumber: registrationNumber,
-                    year: year
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Login information sent successfully.');
-                window.location.href = "page1.html"; // Always redirect to the main page
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.location.href = "page1.html"; // Always redirect to the main page even if there's an error
-            });
+                    year: year,
+                });
+                alert("Data saved successfully!");
+                window.location.href = "page1.html"; // Redirect to another page
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                alert("Failed to save data.");
+            }
         });
     </script>
 </body>
